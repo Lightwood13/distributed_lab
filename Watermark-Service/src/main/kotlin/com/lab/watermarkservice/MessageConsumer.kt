@@ -3,6 +3,7 @@ package com.lab.watermarkservice
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
+import kotlin.system.measureTimeMillis
 
 @Component
 class MessageConsumer(
@@ -17,6 +18,9 @@ class MessageConsumer(
             logger.error("Received invalid id: $message")
             return
         }
-        imageService.addWatermark(imageId)
+        val executionTime = measureTimeMillis {
+            imageService.addWatermark(imageId)
+        }
+        logger.info("Processed image in $executionTime ms")
     }
 }
